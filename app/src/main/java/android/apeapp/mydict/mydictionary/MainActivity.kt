@@ -2,6 +2,10 @@ package android.apeapp.mydict.mydictionary
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -13,35 +17,36 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val editTextInput = findViewById<EditText>(R.id.queryEditText)
+        val searchButton = findViewById<Button>(R.id.searchButton)
 
-        request()
+        searchButton.setOnClickListener {
+            if (editTextInput.text.toString().isNotEmpty()) {
+                request(editTextInput.text.toString())
+            } else {
+                Toast.makeText(this, "Input text cannot be empty!", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
-    fun request() {
-
-        //步骤4:创建Retrofit对象
+    fun request(textInput: String) {
         val retrofit = Retrofit.Builder()
-                .baseUrl("http://fanyi.youdao.com/") // 设置 网络请求 Url
-                .addConverterFactory(GsonConverterFactory.create()) //设置使用Gson解析(记得加入依赖)
+                .baseUrl("http://fanyi.youdao.com/")
+                .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
-        // 步骤5:创建 网络请求接口 的实例
         val request = retrofit.create<PostRequstInterface>(PostRequstInterface::class.java!!)
 
-        //对 发送请求 进行封装(设置需要翻译的内容)
-        val call = request.getCall("I love you")
+        val call = request.getCall(textInput)
 
-        //步骤6:发送网络请求(异步)
-        call.enqueue(object : Callback<Translation1> {
-            override fun onResponse(call: Call<Translation1>, response: Response<Translation1>) {
-                println("xxxxxxxxxxxxxxxxxxx")
-                println(response.body().getTranslateResult()!![0][0].tgt)
-                //System.out.println("翻译是：" + response.body().getTranslateResult()!!.get(0)[0].)
+        call.enqueue(object : Callback<Model.Translation> {
+            override fun onResponse(call: Call<Model.Translation>, response: Response<Model.Translation>) {
+                //Toast.makeText(this, response.body().translateResult[0][0].tgt, Toast.LENGTH_LONG).show()
+                findViewById<TextView>(R.id.resultsTextView).text = response.body().translateResult[0][0].tgt;
             }
 
-            //请求失败时回调
-            override fun onFailure(call: Call<Translation1>, throwable: Throwable) {
-                println("请求失败")
+            override fun onFailure(call: Call<Model.Translation>, throwable: Throwable) {
+                println("Request Error!")
                 println(throwable.message)
             }
         })

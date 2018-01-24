@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Cheese Finder</string>
-    <string name="nothing_found">No cheeses found</string>
-    <string name="search">search</string>
+    <string name="app_name">Kotlin Dictionary</string>
+    <string name="nothing_found">Nothing found</string>
+    <string name="search">Look Up</string>
 </resources>

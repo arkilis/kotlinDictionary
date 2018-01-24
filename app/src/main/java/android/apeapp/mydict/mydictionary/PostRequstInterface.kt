@@ -11,5 +11,5 @@ import retrofit2.http.POST
 interface PostRequstInterface {
     @POST("translate?doctype=json&jsonversion=&type=&keyfrom=&model=&mid=&imei=&vendor=&screen=&ssid=&network=&abtest=")
     @FormUrlEncoded
-    abstract fun getCall(@Field("i") targetSentence: String): Call<Translation1>
+    abstract fun getCall(@Field("i") targetSentence: String): Call<Model.Translation>
 }
