@@ -9,7 +9,7 @@ import retrofit2.http.POST
  * Created by ben on 24/1/18.
  */
 interface PostRequstInterface {
-    @POST("translate?doctype=json&jsonversion=&type=&keyfrom=&model=&mid=&imei=&vendor=&screen=&ssid=&network=&abtest=")
+    @POST("v2?key=AIzaSyAFxNjprKkTrbdDJcR6sqA55ZDxy8HOi3U&target=zh")
     @FormUrlEncoded
-    abstract fun getCall(@Field("i") targetSentence: String): Call<Model.Translation>
+    abstract fun getCall(@Field("q") targetSentence: String): Call<Model.Data>
 }

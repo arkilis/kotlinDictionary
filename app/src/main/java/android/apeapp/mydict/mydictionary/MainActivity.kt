@@ -2,6 +2,7 @@ package android.apeapp.mydict.mydictionary
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     fun request(textInput: String) {
         val retrofit = Retrofit.Builder()
-                .baseUrl("http://fanyi.youdao.com/")
+                .baseUrl("https://translation.googleapis.com/language/translate/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -39,13 +40,12 @@ class MainActivity : AppCompatActivity() {
 
         val call = request.getCall(textInput)
 
-        call.enqueue(object : Callback<Model.Translation> {
-            override fun onResponse(call: Call<Model.Translation>, response: Response<Model.Translation>) {
-                //Toast.makeText(this, response.body().translateResult[0][0].tgt, Toast.LENGTH_LONG).show()
-                findViewById<TextView>(R.id.resultsTextView).text = response.body().translateResult[0][0].tgt;
+        call.enqueue(object : Callback<Model.Data> {
+            override fun onResponse(call: Call<Model.Data>, response: Response<Model.Data>) {
+                findViewById<TextView>(R.id.resultsTextView).text = response.body().data.translations[0].translatedText
             }
 
-            override fun onFailure(call: Call<Model.Translation>, throwable: Throwable) {
+            override fun onFailure(call: Call<Model.Data>, throwable: Throwable) {
                 println("Request Error!")
                 println(throwable.message)
             }

@@ -5,6 +5,7 @@ package android.apeapp.mydict.mydictionary
  */
 
 object Model {
-    data class Translation(val type: String, val errorCode: Int, val elapsedTime: Int, val translateResult: List<List<TranslateResultBean>>)
-    data class TranslateResultBean(val src: String, val tgt: String)
+    data class Data(val data:Translation)
+    data class Translation(val translations: List<TranslateResultBean>)
+    data class TranslateResultBean(val translatedText: String, val detectedSourceLanguage: String)
 }
